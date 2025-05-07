@@ -43,4 +43,4 @@ out/
 *.iml
 
 ### queryDSL ###
-/src/main/generated/
+/umc8thstudy/src/main/generated/
