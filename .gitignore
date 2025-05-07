@@ -41,3 +41,6 @@ out/
 # IntelliJ
 .idea/
 *.iml
+
+### queryDSL ###
+/src/main/generated/
