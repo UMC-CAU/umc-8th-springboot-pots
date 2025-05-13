@@ -41,3 +41,6 @@ out/
 # IntelliJ
 .idea/
 *.iml
+
+### queryDSL ###
+/umc8thstudy/src/main/generated/

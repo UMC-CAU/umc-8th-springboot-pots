@@ -36,4 +36,14 @@ public class Store extends BaseEntity {
 
     @OneToMany(mappedBy = "store")
     private List<Mission> missions = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", score=" + score +
+                ", region=" + (region != null ? region.getName() : "N/A") + // region의 이름 출력
+                '}';
+    }
 }
