@@ -1,5 +1,6 @@
 package com.umcspring.umc8thstudy.global.notification;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,10 @@ import java.util.Map;
 @Component
 public class DiscordNotifier {
 
-    @Value("${discord.webhook.url}")
+    public DiscordNotifier() {
+        Dotenv dotenv = Dotenv.load();
+        this.webhookUrl = dotenv.get("DISCORD_WEBHOOK_URL");
+    }
     private String webhookUrl;
 
     public void sendMessage(String message) {

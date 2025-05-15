@@ -47,3 +47,5 @@ out/
 
 ### yml ###
 application.yml
+
+.env

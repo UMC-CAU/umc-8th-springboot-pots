@@ -4,9 +4,11 @@ spring:
     username: localmaster
     password: qwer1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   sql:
     init:
       mode: never
+
   jpa:
     properties:
       hibernate:
@@ -17,3 +19,7 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+
+discord:
+  webhook:
+    url: ${DISCORD_WEBHOOK_URL}
