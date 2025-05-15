@@ -44,3 +44,6 @@ out/
 
 ### queryDSL ###
 /umc8thstudy/src/main/generated/
+
+### yml ###
+application.yml
