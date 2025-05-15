@@ -3,8 +3,10 @@ package com.umcspring.umc8thstudy.apiPayload.exception;
 import com.umcspring.umc8thstudy.apiPayload.ApiResponse;
 import com.umcspring.umc8thstudy.apiPayload.code.ErrorReasonDTO;
 import com.umcspring.umc8thstudy.apiPayload.code.status.ErrorStatus;
+import com.umcspring.umc8thstudy.global.notification.DiscordNotifier;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,8 +26,10 @@ import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
+@RequiredArgsConstructor
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
+    private final DiscordNotifier discordNotifier;
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -56,7 +60,25 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         e.printStackTrace();
 
-        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
+        // 디스코드 알림 전송
+        String path = ((ServletWebRequest) request).getRequest().getRequestURI();
+        String errorMessage = String.format("""
+        🚨 **500 Internal Server Error 발생**
+        - 시간: %s
+        - URL: `%s`
+        - 에러: `%s`
+        """, java.time.LocalDateTime.now(), path, e.toString());
+
+        discordNotifier.sendMessage(errorMessage);
+
+        return handleExceptionInternalFalse(
+                e,
+                ErrorStatus._INTERNAL_SERVER_ERROR,
+                HttpHeaders.EMPTY,
+                ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),
+                request,
+                e.getMessage()
+        );
     }
 
     @ExceptionHandler(value = GeneralException.class)
