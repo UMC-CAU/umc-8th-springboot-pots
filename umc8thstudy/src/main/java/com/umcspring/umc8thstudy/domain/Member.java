@@ -10,6 +10,7 @@ import com.umcspring.umc8thstudy.domain.mapping.MemberPrefer;
 import com.umcspring.umc8thstudy.domain.Notification;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class Member extends BaseEntity {
     private LocalDate inactiveDate;
 
     //점수
+    @ColumnDefault("0")
     private Integer score;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -68,4 +70,8 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Notification> notificationList = new ArrayList<>();
+
+    public void addAll(List<MemberPrefer> prefers) {
+        this.memberPreferList.addAll(prefers);
+    }
 }
