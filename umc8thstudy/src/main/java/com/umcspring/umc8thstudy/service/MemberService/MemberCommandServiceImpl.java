@@ -8,6 +8,7 @@ import com.umcspring.umc8thstudy.domain.Food;
 import com.umcspring.umc8thstudy.domain.Member;
 import com.umcspring.umc8thstudy.domain.mapping.MemberPrefer;
 import com.umcspring.umc8thstudy.repository.FoodCategoryRepository;
+import com.umcspring.umc8thstudy.repository.MemberPreferRepository;
 import com.umcspring.umc8thstudy.repository.MemberRepository;
 import com.umcspring.umc8thstudy.web.dto.MemberRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
     private final MemberRepository memberRepository;
     private final FoodCategoryRepository foodCategoryRepository;
+    private final MemberPreferRepository memberPreferRepository;
 
     @Override
     @Transactional
@@ -33,10 +35,13 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                     return foodCategoryRepository.findById(category).orElseThrow(() -> new TempHandler(ErrorStatus.FOOD_CATEGORY_NOT_FOUND));
                 }).collect(Collectors.toList());
 
+        // Agree관련도 작성해야함
+
         List<MemberPrefer> memberPreferList = MemberPreferConverter.toMemberPreferList(foodCategoryList);
-
-        memberPreferList.forEach(memberPrefer -> {memberPrefer.setMember(newMember);});
-
+        memberPreferList.forEach(prefer -> {
+            prefer.setMember(newMember);                   // 연관관계 주인 쪽 설정
+            newMember.getMemberPreferList().add(prefer);   // mappedBy 쪽도 동기화
+        });
         return memberRepository.save(newMember);
     }
 }
