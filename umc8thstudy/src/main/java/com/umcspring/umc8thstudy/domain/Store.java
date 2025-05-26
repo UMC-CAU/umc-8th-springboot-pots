@@ -37,6 +37,9 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store")
     private List<Mission> missions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "store")
+    private List<Review> reviews = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Store{" +
@@ -46,4 +49,6 @@ public class Store extends BaseEntity {
                 ", region=" + (region != null ? region.getName() : "N/A") + // region의 이름 출력
                 '}';
     }
+
+
 }

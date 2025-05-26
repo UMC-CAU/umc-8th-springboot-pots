@@ -18,6 +18,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD4001", "음식 카테고리가 항목에 없습니다."),
 
+    // store
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND,"STORE4001", "확인된 가게가 없습니다."),
 
     // 가장 일반적인 응답
     _INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 에러, 관리자에게 문의 바랍니다."),
