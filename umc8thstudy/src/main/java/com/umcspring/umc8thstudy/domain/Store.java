@@ -23,6 +23,7 @@ public class Store extends BaseEntity {
 
     private Float score;
 
+
     private BigDecimal latitude;
 
     private BigDecimal longitude;

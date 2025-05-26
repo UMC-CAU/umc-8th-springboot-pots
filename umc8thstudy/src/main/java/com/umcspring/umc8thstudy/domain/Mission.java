@@ -25,5 +25,10 @@ public class Mission extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    public void assignMission(Store store) {
+        this.store = store;
+        store.getMissions().add(this);
+    }
     //사용자미션은 매핑안함
+
 }

@@ -37,6 +37,7 @@ public class ReviewService {
                 .score(request.getScore())
                 .content(request.getContent())
                 .build();
+        review.assignMember(review.getMember());
 
         return reviewRepository.save(review);
     }
