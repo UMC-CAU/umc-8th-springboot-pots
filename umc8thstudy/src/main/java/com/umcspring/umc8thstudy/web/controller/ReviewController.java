@@ -4,11 +4,9 @@ import com.umcspring.umc8thstudy.apiPayload.ApiResponse;
 import com.umcspring.umc8thstudy.domain.Review;
 import com.umcspring.umc8thstudy.service.ReviewService.ReviewService;
 import com.umcspring.umc8thstudy.web.dto.ReviewRequestDTO;
+import com.umcspring.umc8thstudy.web.dto.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
