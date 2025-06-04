@@ -1,5 +1,7 @@
 package com.umcspring.umc8thstudy.service.StoreService;
 
+import com.umcspring.umc8thstudy.apiPayload.code.status.ErrorStatus;
+import com.umcspring.umc8thstudy.apiPayload.exception.handler.TempHandler;
 import com.umcspring.umc8thstudy.domain.Review;
 import com.umcspring.umc8thstudy.domain.Store;
 import com.umcspring.umc8thstudy.repository.ReviewRepository;
@@ -37,7 +39,8 @@ public class StoreQueryServiceImpl implements StoreQueryService{
 
     @Override
     public Page<Review> getReviewList(Long StoreId, Integer page){
-        Store store = storeRepository.findById(StoreId).get();
+        Store store = storeRepository.findById(StoreId)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.STORE_NOT_FOUND));
 
         Page<Review> StorePage = reviewRepository.findAllByStore(store, PageRequest.of(page, 10));
         return StorePage;
