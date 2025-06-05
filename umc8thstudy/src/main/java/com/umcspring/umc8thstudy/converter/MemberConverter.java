@@ -40,6 +40,14 @@ public class MemberConverter {
                 .build();
     }
 
+
+    public static MemberResponseDTO.LoginResultDTO toLoginResultDTO(Long memberId, String accessToken) {
+        return MemberResponseDTO.LoginResultDTO.builder()
+                .memberId(memberId)
+                .accessToken(accessToken)
+                .build();
+    }
+
     private static Gender parseGender(String value) {
         try {
             return Gender.valueOf(value.toUpperCase());

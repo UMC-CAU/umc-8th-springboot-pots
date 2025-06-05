@@ -15,6 +15,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // member
     NOT_VALID_GENDER(HttpStatus.BAD_REQUEST,"MEMBER4001", "잘못된 성별입니다"),
+    INVALID_TOKEN(HttpStatus.NOT_FOUND, "TOKEN4001", "토큰이 없습니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "PASSWORD4001", "잘못된 비밀번호입니다."),
 
     FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD4001", "음식 카테고리가 항목에 없습니다."),
 

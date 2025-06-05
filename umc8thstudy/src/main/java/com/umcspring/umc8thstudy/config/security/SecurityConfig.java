@@ -1,51 +1,36 @@
 package com.umcspring.umc8thstudy.config.security;
 
+import com.umcspring.umc8thstudy.config.security.jwt.JwtAuthenticationFilter;
+import com.umcspring.umc8thstudy.config.security.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
         http
-                .authorizeHttpRequests(requests -> requests
-                        // ─── 여기에 Swagger 관련 경로를 permitAll에 추가 ───
-                        .requestMatchers(
-                                "/",
-                                "/home",
-                                "/signup",
-                                "/members/signup",
-                                "/css/**",
-                                "/swagger-ui/**",         // Swagger UI 정적 리소스
-                                "/v3/api-docs/**",        // OpenAPI JSON 문서
-                                "/swagger-ui.html",       // (필요 시) 예전 버전 호환
-                                "/swagger-resources/**",  // (필요 시) springfox 호환
-                                "/webjars/**"             // (필요 시) WebJar 리소스
-                        ).permitAll()
-
-                        // ADMIN 권한이 필요한 경로
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // 그 외 모든 요청은 인증 필요
-                        .anyRequest().authenticated()
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/home", true)
-                        .permitAll()
+                .authorizeHttpRequests(
+                        (requests) -> requests
+                                .requestMatchers("/", "/members/join", "/members/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                );
+                .csrf()
+                .disable()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
