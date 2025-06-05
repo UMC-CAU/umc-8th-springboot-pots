@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회원가입</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            margin-bottom: 12px;
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .checkbox-group {
+            display: inline-block;
+            vertical-align: top;
+            width: 300px;
+        }
+
+        .checkbox-group label {
+            width: auto;
+            margin-right: 15px;
+            font-weight: normal;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #ffebee;
+            border: 1px solid red;
+            border-radius: 4px;
+        }
+
+        .form-row {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .required {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h2>회원가입</h2>
+
+<!-- CSRF 토큰이 자동으로 포함되도록 Thymeleaf form 사용 -->
+<form th:action="@{/members/signup}" th:object="${memberJoinDto}" method="post">
+    <!-- 서버에서 넘어온 에러 메시지가 있으면 표시 -->
+    <div th:if="${error}" th:text="${error}" class="error"></div>
+
+    <!-- 1. 이름 -->
+    <div class="form-row">
+        <label for="name">이름 <span class="required">*</span>:</label>
+        <input type="text" id="name" th:field="*{name}" required
+               placeholder="이름을 입력하세요" />
+    </div>
+
+    <!-- 2. 주소 -->
+    <div class="form-row">
+        <label for="address">주소 <span class="required">*</span>:</label>
+        <input type="text" id="address" th:field="*{address}" required
+               placeholder="주소를 입력하세요" />
+    </div>
+
+    <!-- 3. 이메일 -->
+    <div class="form-row">
+        <label for="email">이메일 <span class="required">*</span>:</label>
+        <input type="email" id="email" th:field="*{email}" required
+               placeholder="example@email.com" />
+    </div>
+
+    <!-- 4. 비밀번호 -->
+    <div class="form-row">
+        <label for="password">비밀번호 <span class="required">*</span>:</label>
+        <input type="password" id="password" th:field="*{password}" required
+               placeholder="비밀번호를 입력하세요" minlength="6" />
+    </div>
+
+    <!-- 5. 휴대폰 번호 -->
+    <div class="form-row">
+        <label for="phoneAddress">휴대폰 번호 <span class="required">*</span>:</label>
+        <input type="tel" id="phoneAddress" th:field="*{phoneAddress}"
+               placeholder="010-1234-5678" required
+               pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" />
+    </div>
+
+    <!-- 6. 생년월일 -->
+    <div class="form-row">
+        <label for="birth">생년월일 <span class="required">*</span>:</label>
+        <input type="date" id="birth" th:field="*{birth}" required />
+    </div>
+
+    <!-- 7. 성별 -->
+    <div class="form-row">
+        <label for="gender">성별 <span class="required">*</span>:</label>
+        <select id="gender" th:field="*{gender}" required>
+            <option value="">선택하세요</option>
+            <option value="MALE">남성</option>
+            <option value="FEMALE">여성</option>
+            <option value="NONE">선택안함</option>
+        </select>
+    </div>
+
+    <!-- 8. 소셜 타입 -->
+    <div class="form-row">
+        <label for="socialType">가입 방식 <span class="required">*</span>:</label>
+        <select id="socialType" th:field="*{socialType}" required>
+            <option value="">선택하세요</option>
+            <option value="LOCAL" selected>기본(로컬)</option>
+            <option value="GOOGLE">구글</option>
+            <option value="KAKAO">카카오</option>
+            <option value="NAVER">네이버</option>
+        </select>
+    </div>
+
+    <!-- 9. 선호 카테고리 -->
+    <div class="form-row">
+        <label>선호 카테고리:</label>
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" th:field="*{memberPreferList}" value="1" />
+                한식
+            </label>
+            <label>
+                <input type="checkbox" th:field="*{memberPreferList}" value="2" />
+                중식
+            </label>
+            <label>
+                <input type="checkbox" th:field="*{memberPreferList}" value="3" />
+                일식
+            </label>
+            <label>
+                <input type="checkbox" th:field="*{memberPreferList}" value="4" />
+                양식
+            </label>
+            <label>
+                <input type="checkbox" th:field="*{memberPreferList}" value="5" />
+                분식
+            </label>
+        </div>
+    </div>
+
+    <!-- 10. 약관 동의 항목 -->
+    <div class="form-row">
+        <label>약관 동의 <span class="required">*</span>:</label>
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" th:field="*{memberAgreeList}" value="1" required />
+                이용약관 동의 (필수)
+            </label>
+            <label>
+                <input type="checkbox" th:field="*{memberAgreeList}" value="2" required />
+                개인정보 수집·이용 동의 (필수)
+            </label>
+            <label>
+                <input type="checkbox" th:field="*{memberAgreeList}" value="3" />
+                마케팅 정보 수신 동의 (선택)
+            </label>
+        </div>
+    </div>
+
+    <!-- 11. 역할 -->
+    <div class="form-row">
+        <label for="role">역할 <span class="required">*</span>:</label>
+        <select id="role" th:field="*{role}" required>
+            <option value="">선택하세요</option>
+            <option value="USER" selected>일반 사용자</option>
+            <option value="ADMIN">관리자</option>
+        </select>
+    </div>
+
+    <div style="text-align: center;">
+        <button type="submit">가입하기</button>
+        <button type="button" onclick="location.href='/login'"
+                style="background-color: #6c757d; margin-left: 10px;">
+            로그인으로 돌아가기
+        </button>
+    </div>
+</form>
+
+<script>
+    // 폼 제출 시 디버깅용 로그
+    document.querySelector('form').addEventListener('submit', function(e) {
+        console.log('폼이 제출됩니다.');
+        console.log('Action URL:', this.action);
+        console.log('Method:', this.method);
+
+        // 필수 체크박스 검증
+        const requiredCheckboxes = document.querySelectorAll('input[type="checkbox"][required]');
+        let allChecked = true;
+
+        requiredCheckboxes.forEach(checkbox => {
+            const name = checkbox.name;
+            const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+            if (checked.length === 0) {
+                allChecked = false;
+            }
+        });
+
+        if (!allChecked) {
+            alert('필수 약관에 동의해주세요.');
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>
+</body>
+</html>
