@@ -41,6 +41,14 @@ public class MemberConverter {
     }
 
 
+    public static MemberResponseDTO.MemberInfoDTO toMemberInfoDTO(Member member) {
+        return MemberResponseDTO.MemberInfoDTO.builder()
+                .name(member.getName())
+                .email(member.getEmail())
+                .gender(member.getGender().name())
+                .build();
+    }
+
     public static MemberResponseDTO.LoginResultDTO toLoginResultDTO(Long memberId, String accessToken) {
         return MemberResponseDTO.LoginResultDTO.builder()
                 .memberId(memberId)
